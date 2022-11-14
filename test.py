@@ -25,15 +25,26 @@ df = pandas.DataFrame(columns = ["Start", "End"])
 video = cv2.VideoCapture(0)
 
 # Resize
-video.set(cv2.CAP_PROP_FRAME_WIDTH, 128)
-video.set(cv2.CAP_PROP_FRAME_HEIGHT, 72)
+video.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+video.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
 
-
+video.set(cv2.CAP_PROP_FPS, 1)
+fps = int(video.get(5))
+print("fps:", fps)
+	
 
 # Infinite while loop to treat stack of image as video
 while True:
 	# Reading frame(image) from video
 	check, frame = video.read()
+
+	video.set(cv2.CAP_PROP_FPS, 1)
+
+	k = cv2.waitKey(100)
+
+	if k == 27:
+		cv2.destroyAllWindows()
+		break
 
 	# Initializing motion = 0(no motion)
 	motion = 0
@@ -57,8 +68,8 @@ while True:
 
 	# If change in between static background and
 	# current frame is greater than 30 it will show white color(255)
-	thresh_frame = cv2.threshold(diff_frame, 30, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C) # Threshold Adaptive
-	# thresh_frame = cv2.adaptiveThreshold(diff_frame, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C)
+	thresh_frame = cv2.threshold(diff_frame, 30, 255, cv2.THRESH_BINARY)[1] 
+	# thresh_frame = cv2.adaptiveThreshold(diff_frame, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 5, 2) 
 	thresh_frame = cv2.dilate(thresh_frame, None, iterations = 2)
 
 	# Finding contour of moving object
