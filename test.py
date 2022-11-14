@@ -28,12 +28,23 @@ video = cv2.VideoCapture(0)
 video.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 video.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
 
-
+video.set(cv2.CAP_PROP_FPS, 1)
+fps = int(video.get(5))
+print("fps:", fps)
+	
 
 # Infinite while loop to treat stack of image as video
 while True:
 	# Reading frame(image) from video
 	check, frame = video.read()
+
+	video.set(cv2.CAP_PROP_FPS, 1)
+
+	k = cv2.waitKey(100)
+
+	if k == 27:
+		cv2.destroyAllWindows()
+		break
 
 	# Initializing motion = 0(no motion)
 	motion = 0
