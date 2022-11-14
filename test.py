@@ -3,7 +3,6 @@
 
 # importing OpenCV, time and Pandas library
 import cv2, time, pandas
-import time
 # importing datetime class from datetime library
 from datetime import datetime
 
@@ -12,6 +11,8 @@ static_back = None
 
 # List when any moving object appear
 motion_list = [ None, None ]
+
+wait = time.sleep
 
 # Time of movement
 time = []
@@ -22,6 +23,12 @@ df = pandas.DataFrame(columns = ["Start", "End"])
 
 # Capturing video
 video = cv2.VideoCapture(0)
+
+# Resize
+video.set(cv2.CAP_PROP_FRAME_WIDTH, 128)
+video.set(cv2.CAP_PROP_FRAME_HEIGHT, 72)
+
+
 
 # Infinite while loop to treat stack of image as video
 while True:
@@ -50,7 +57,8 @@ while True:
 
 	# If change in between static background and
 	# current frame is greater than 30 it will show white color(255)
-	thresh_frame = cv2.threshold(diff_frame, 30, 255, cv2.THRESH_BINARY)[1]
+	thresh_frame = cv2.threshold(diff_frame, 30, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C) # Threshold Adaptive
+	# thresh_frame = cv2.adaptiveThreshold(diff_frame, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C)
 	thresh_frame = cv2.dilate(thresh_frame, None, iterations = 2)
 
 	# Finding contour of moving object
@@ -58,7 +66,7 @@ while True:
 					cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
 	for contour in cnts:
-		if cv2.contourArea(contour) < 1:
+		if cv2.contourArea(contour) < 10000:
 			continue
 		motion = 1
 
