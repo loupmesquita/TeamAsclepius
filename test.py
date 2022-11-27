@@ -1,7 +1,8 @@
 # Python program to implement
 # Webcam Motion Detector
-import discord
-import telegram
+
+# importing codes for notifications on discord and telegram
+import discord, telegram
 # importing OpenCV, time and Pandas library
 import cv2, time, pandas
 # importing datetime class from datetime library
