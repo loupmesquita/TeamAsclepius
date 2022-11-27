@@ -1,6 +1,6 @@
 # Python program to implement
 # Webcam Motion Detector
-
+import discord
 # importing OpenCV, time and Pandas library
 import cv2, time, pandas
 # importing datetime class from datetime library
@@ -28,7 +28,7 @@ video = cv2.VideoCapture(0)
 video.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 video.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
 
-video.set(cv2.CAP_PROP_FPS, 1)
+video.set(cv2.CAP_PROP_FPS, 15)
 fps = int(video.get(5))
 print("fps:", fps)
 	
@@ -37,14 +37,6 @@ print("fps:", fps)
 while True:
 	# Reading frame(image) from video
 	check, frame = video.read()
-
-	video.set(cv2.CAP_PROP_FPS, 1)
-
-	k = cv2.waitKey(100)
-
-	if k == 27:
-		cv2.destroyAllWindows()
-		break
 
 	# Initializing motion = 0(no motion)
 	motion = 0
@@ -69,18 +61,18 @@ while True:
 	# If change in between static background and
 	# current frame is greater than 30 it will show white color(255)
 	thresh_frame = cv2.threshold(diff_frame, 30, 255, cv2.THRESH_BINARY)[1] 
-	# thresh_frame = cv2.adaptiveThreshold(diff_frame, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 5, 2) 
+	# expanding the contour
 	thresh_frame = cv2.dilate(thresh_frame, None, iterations = 2)
-
+	print("fps:", fps)
 	# Finding contour of moving object
 	cnts,_ = cv2.findContours(thresh_frame.copy(),
 					cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
 	for contour in cnts:
-		if cv2.contourArea(contour) < 10000:
+		if cv2.contourArea(contour) < 500:
 			continue
 		motion = 1
-
+		#discord.send_discord_message_once("heyhey")
 		(x, y, w, h) = cv2.boundingRect(contour)
 		# making green rectangle around the moving object
 		cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
