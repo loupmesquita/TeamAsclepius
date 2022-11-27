@@ -1,6 +1,7 @@
 # Python program to implement
 # Webcam Motion Detector
 import discord
+import telegram
 # importing OpenCV, time and Pandas library
 import cv2, time, pandas
 # importing datetime class from datetime library
@@ -72,7 +73,9 @@ while True:
 		if cv2.contourArea(contour) < 500:
 			continue
 		motion = 1
-		#discord.send_discord_message_once("heyhey")
+		# notifications for telegram and discord
+		telegram.send_telegram_message_once('Patient has moved!')
+		discord.send_discord_message_once('Patient has moved!')
 		(x, y, w, h) = cv2.boundingRect(contour)
 		# making green rectangle around the moving object
 		cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 3)
