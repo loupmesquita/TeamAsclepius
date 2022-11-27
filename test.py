@@ -27,8 +27,8 @@ df = pandas.DataFrame(columns = ["Start", "End"])
 video = cv2.VideoCapture(0)
 
 # Resize
-video.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-video.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
+video.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
+video.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
 
 video.set(cv2.CAP_PROP_FPS, 15)
 fps = int(video.get(5))
